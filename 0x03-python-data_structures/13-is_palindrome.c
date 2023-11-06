@@ -1,63 +1,72 @@
 #include "lists.h"
-#include <stdio.h>
-/**
- * is_palindrome - checks if a singly linked list is a palindrome.
- * @head: double pointer to head of list
- *
- * Return: number of nodes
- */
 
+listint_t *reverse_listint(listint_t **head);
+int is_palindrome(listint_t **head);
+
+/**
+ * reverse_listint - Reverses a singly-linked listint_t list.
+ * @head: A pointer to the starting node of the list to reverse.
+ *
+ * Return: A pointer to the head of the reversed list.
+ */
+listint_t *reverse_listint(listint_t **head)
+{
+	listint_t *node = *head, *next, *prev = NULL;
+
+	while (node)
+	{
+		next = node->next;
+		node->next = prev;
+		prev = node;
+		node = next;
+	}
+
+	*head = prev;
+	return (*head);
+}
+
+/**
+ * is_palindrome - Checks if a singly linked list is a palindrome.
+ * @head: A pointer to the head of the linked list.
+ *
+ * Return: If the linked list is not a palindrome - 0.
+ *         If the linked list is a palindrome - 1.
+ */
 int is_palindrome(listint_t **head)
 {
-	listint_t *beg = *head, *nod = *head, *tail = *head, *rev, *aux1, *aux2;
-	int forward = 0, middle = 0, num = 0, nodes = 1, back;
+	listint_t *tmp, *rev, *mid;
+	size_t size = 0, i;
 
-	if (head == NULL || *head == NULL || (*head)->next == NULL)
+	if (*head == NULL || (*head)->next == NULL)
 		return (1);
-	while (tail->next != NULL)
+
+	tmp = *head;
+	while (tmp)
 	{
-		tail = tail->next;
-		++nodes;
+		size++;
+		tmp = tmp->next;
 	}
-	rev = tail;
-	if (nodes % 2 == 0)
-		middle = nodes / 2;
-	else
-		middle = (nodes + 1) / 2;
-	for (forward = 0; forward < middle; forward++)
-		beg = beg->next;
-	if (beg->next != NULL)
+
+	tmp = *head;
+	for (i = 0; i < (size / 2) - 1; i++)
+		tmp = tmp->next;
+
+	if ((size % 2) == 0 && tmp->n != tmp->next->n)
+		return (0);
+
+	tmp = tmp->next->next;
+	rev = reverse_listint(&tmp);
+	mid = rev;
+
+	tmp = *head;
+	while (rev)
 	{
-		aux1 = beg;
-		aux2 = beg->next;
-		while (aux2->next != NULL)
-		{
-			beg = aux2;
-			aux2 = beg->next;
-			beg->next = aux1;
-			aux1 = beg;
-		}
-		tail->next = beg;
-		beg = beg->next;
-	}
-	else
-		tail->next = *head;
-	for (num = 0; num < nodes / 2; num++)
-	{
-		if (tail->n != nod->n)
+		if (tmp->n != rev->n)
 			return (0);
-		tail = tail->next;
-		nod = nod->next;
+		tmp = tmp->next;
+		rev = rev->next;
 	}
-	aux1 = rev;
-	aux2 = rev->next;
-	aux1->next = NULL;
-	for (back = 0; back < num - 1; back++)
-	{
-		rev = aux2;
-		aux2 = rev->next;
-		rev->next = aux1;
-		aux1 = rev;
-	}
+	reverse_listint(&mid);
+
 	return (1);
 }
