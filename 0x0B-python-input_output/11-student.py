@@ -1,42 +1,30 @@
 #!/usr/bin/python3
-"""Module containing Student class"""
+"""Function that writes a class Student that defines a student"""
 
 
 class Student:
-    """Student class"""
+    """Public instance attributes"""
 
     def __init__(self, first_name, last_name, age):
-        """constructor
+        """Instantiation with first name, last name, age"""
 
-        Args:
-            first_name(str): First name
-            last_name(str): Last name
-            age(int): Age
-        """
         self.first_name = first_name
         self.last_name = last_name
         self.age = age
 
     def to_json(self, attrs=None):
-        """Returns a dict representation of the student.
+        """Retrieves a dictionary representation of a Student instance"""
 
-        If attrs is a list of strings, only attribute names
-        contained in this list must be retrieved.
+        if attrs is None:
+            return self.__dict__
+        new_dict = {}
+        for a in attrs:
+            if type(a) is str:
+                if i in self_dict__:
+                    new_dict[a] = self.__dict__[a]
+        return new_dict
 
-        Args:
-            attrs(list): Optional argument
-        """
-        if (type(attrs) == list and all(type(attr) == str
-                                        for attr in attrs)):
-            return {attr: getattr(self, attr)
-                    for attr in attrs if hasattr(self, attr)}
-        return self.__dict__
-
-    def reload_from_json(self, json):
-        """Replaces all attributes of Student instance
-
-        Args:
-            json(dict): key/value pair to replace attributes
-        """
-        for k, v in *json:
-            setattr(self, k, v)
+        def reload_from_json(self, json):
+            """Replaces all attributes of the Student instance"""
+            for key in json:
+                self.__dict__[key] = json[key]
